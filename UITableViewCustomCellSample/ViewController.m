@@ -212,39 +212,42 @@ static NSInteger const ViewControllerTableSecsion   = 2;
  *  セグエでの画面遷移前に呼び出されます。
  *
  *  @param segue  セグエ（pushを選択したやつ）
- *  @param sender
+ *  @param sender 呼び出し元のViewController（今回の場合はViewController）
  */
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    // 遷移先を取得します
-    DetailViewController *detailViewController = segue.destinationViewController;
+    // セグエが複数ある場合はこちらで確認して、分岐します。
+    if ([segue.identifier  isEqualToString:@"pushDetailView"]) {
+        // 遷移先を取得します
+        DetailViewController *detailViewController = segue.destinationViewController;
     
-    // 詳細画面に画像名をセット
-    detailViewController.imageName = (_selectedIndexPath.section == 0) ? @"ios1-100x100" : @"android-200x200";
-    
-    if (self.searchDisplayController.isActive) {
-        // 詳細画面に検索したデータソースからデバイス名をセット
-        switch (_selectedIndexPath.section) {
-            case 0: // iOS
-                detailViewController.labelDeviceName = _dataSourceSearchResultsiPhone[_selectedIndexPath.row];
-                break;
-            case 1: // Android
-                detailViewController.labelDeviceName = _dataSourceSearchResultsAndroid[_selectedIndexPath.row];
-                break;
-            default:
-                break;
-        }
-    } else {
-        // 詳細画面にデータソースからデバイス名をセット
-        switch (_selectedIndexPath.section) {
-            case 0: // iOS
-                detailViewController.labelDeviceName = _dataSourceiPhone[_selectedIndexPath.row];
-                break;
-            case 1: // Android
-                detailViewController.labelDeviceName = _dataSourceAndroid[_selectedIndexPath.row];
-                break;
-            default:
-                break;
+        // 詳細画面に画像名をセット
+        detailViewController.imageName = (_selectedIndexPath.section == 0) ? @"ios1-100x100" : @"android-200x200";
+        
+        if (self.searchDisplayController.isActive) {
+            // 詳細画面に検索したデータソースからデバイス名をセット
+            switch (_selectedIndexPath.section) {
+                case 0: // iOS
+                    detailViewController.labelDeviceName = _dataSourceSearchResultsiPhone[_selectedIndexPath.row];
+                    break;
+                case 1: // Android
+                    detailViewController.labelDeviceName = _dataSourceSearchResultsAndroid[_selectedIndexPath.row];
+                    break;
+                default:
+                    break;
+            }
+        } else {
+            // 詳細画面にデータソースからデバイス名をセット
+            switch (_selectedIndexPath.section) {
+                case 0: // iOS
+                    detailViewController.labelDeviceName = _dataSourceiPhone[_selectedIndexPath.row];
+                    break;
+                case 1: // Android
+                    detailViewController.labelDeviceName = _dataSourceAndroid[_selectedIndexPath.row];
+                    break;
+                default:
+                    break;
+            }
         }
     }
 }
